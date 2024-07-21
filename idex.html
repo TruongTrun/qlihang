@@ -123,7 +123,7 @@ h1 {
         <div id="item-list"></div>
     </div>
 
-    <script>// Dữ liệu mặt hàng mẫu
+    <script>
         let items = [
             { id: 1, name: "Bánh mì sandwich", price: 25000, description: "Bánh mì sandwich thịt xông khói, rau sống và sốt mayonnaise." },
             { id: 2, name: "Nước giải khát Coca-Cola", price: 15000, description: "Chai Coca-Cola 330ml." },
@@ -132,18 +132,17 @@ h1 {
             { id: 5, name: "Sữa tươi không đường", price: 20000, description: "Lon sữa tươi không đường 180ml." }
         ];
         
-        // DOM elements
+       
         const itemList = document.getElementById('item-list');
         const itemForm = document.getElementById('item-form');
         const itemName = document.getElementById('name');
         const itemPrice = document.getElementById('price');
         
-        // Function to render items
+        
         function renderItems() {
-            // Clear the item list first
+          
             itemList.innerHTML = '';
         
-            // Render each item
             items.forEach(item => {
                 const itemElement = document.createElement('div');
                 itemElement.classList.add('item');
@@ -162,7 +161,6 @@ h1 {
             });
         }
         
-        // Function to add an item
         function addItem(name, price, description) {
             const newItem = {
                 id: items.length + 1,
@@ -197,13 +195,11 @@ h1 {
             }
         }
         
-        // Function to delete an item
         function deleteItem(id) {
             items = items.filter(item => item.id !== id);
             renderItems();
         }
         
-        // Event listener for form submission
         itemForm.addEventListener('submit', function(event) {
             event.preventDefault();
         
@@ -220,7 +216,7 @@ h1 {
             }
         });
         
-        // Initial rendering of items
+       
         renderItems();
         </script>
 </body>
