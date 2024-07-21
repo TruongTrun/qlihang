@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lí hàng tạp hoá</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+#item-form {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+#item-form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#item-form input[type="text"],
+#item-form input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+#item-form button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+#item-form button:hover {
+    background-color: #45a049;
+}
+
+#item-list {
+    margin-top: 20px;
+}
+
+.item {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+.item h2 {
+    margin-top: 0;
+    color: #007bff;
+}
+
+.item p {
+    margin-bottom: 5px;
+}
+
+.item p strong {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.item-controls {
+    text-align: right;
+}
+
+.item-controls button {
+    padding: 5px 10px;
+    background-color: #f44336;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.item-controls button:hover {
+    background-color: #d32f2f;
+}
+
+    </style>
+
+</head>
+<body>
+    <div class="container">
+        <h1>Quản lí hàng tạp hoá</h1>
+
+        <form id="item-form">
+            <label for="name">Tên mặt hàng:</label>
+            <input type="text" id="name" required>
+            <label for="price">Giá:</label>
+            <input type="number" id="price" min="0" step="1000" required>
+            <button type="submit">Thêm mặt hàng</button>
+        </form>
+
+        <div id="item-list"></div>
+    </div>
+
+    <script>// Dữ liệu mặt hàng mẫu
+        let items = [
+            { id: 1, name: "Bánh mì sandwich", price: 25000, description: "Bánh mì sandwich thịt xông khói, rau sống và sốt mayonnaise." },
+            { id: 2, name: "Nước giải khát Coca-Cola", price: 15000, description: "Chai Coca-Cola 330ml." },
+            { id: 3, name: "Bánh quy sô cô la", price: 10000, description: "Bánh quy sô cô la mini." },
+            { id: 4, name: "Trái cây táo", price: 5000, description: "Một quả táo nhập khẩu từ New Zealand." },
+            { id: 5, name: "Sữa tươi không đường", price: 20000, description: "Lon sữa tươi không đường 180ml." }
+        ];
+        
+        // DOM elements
+        const itemList = document.getElementById('item-list');
+        const itemForm = document.getElementById('item-form');
+        const itemName = document.getElementById('name');
+        const itemPrice = document.getElementById('price');
+        
+        // Function to render items
+        function renderItems() {
+            // Clear the item list first
+            itemList.innerHTML = '';
+        
+            // Render each item
+            items.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.classList.add('item');
+        
+                itemElement.innerHTML = `
+                    <h2>${item.name}</h2>
+                    <p><strong>Giá:</strong> ${item.price} VND</p>
+                    <p><strong>Mô tả:</strong> ${item.description}</p>
+                    <div class="item-controls">
+                        <button onclick="editItem(${item.id})">Sửa</button>
+                        <button onclick="deleteItem(${item.id})">Xoá</button>
+                    </div>
+                `;
+        
+                itemList.appendChild(itemElement);
+            });
+        }
+        
+        // Function to add an item
+        function addItem(name, price, description) {
+            const newItem = {
+                id: items.length + 1,
+                name: name,
+                price: price,
+                description: description
+            };
+        
+            items.push(newItem);
+            renderItems();
+        }
+        
+        // Function to edit an item
+        function editItem(id) {
+            const itemToEdit = items.find(item => item.id === id);
+        
+            if (itemToEdit) {
+                const newName = prompt("Nhập tên mặt hàng mới:", itemToEdit.name);
+                const newPrice = parseInt(prompt("Nhập giá mặt hàng mới (VND):", itemToEdit.price));
+                const newDescription = prompt("Nhập mô tả mặt hàng mới:", itemToEdit.description);
+        
+                if (newName && !isNaN(newPrice) && newDescription) {
+                    itemToEdit.name = newName;
+                    itemToEdit.price = newPrice;
+                    itemToEdit.description = newDescription;
+                    renderItems();
+                } else {
+                    alert("Vui lòng nhập đầy đủ thông tin và giá trị hợp lệ.");
+                }
+            } else {
+                alert("Không tìm thấy mặt hàng để chỉnh sửa.");
+            }
+        }
+        
+        // Function to delete an item
+        function deleteItem(id) {
+            items = items.filter(item => item.id !== id);
+            renderItems();
+        }
+        
+        // Event listener for form submission
+        itemForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+        
+            const name = itemName.value.trim();
+            const price = parseInt(itemPrice.value);
+            const description = ""; // Thêm mô tả có thể điền trong tương lai
+        
+            if (name && !isNaN(price)) {
+                addItem(name, price, description);
+                itemName.value = '';
+                itemPrice.value = '';
+            } else {
+                alert("Vui lòng nhập đầy đủ thông tin và giá trị hợp lệ.");
+            }
+        });
+        
+        // Initial rendering of items
+        renderItems();
+        </script>
+</body>
+</html>
